@@ -8,11 +8,10 @@ RUN echo exit 101 > /usr/sbin/policy-rc.d
 RUN chmod +x /usr/sbin/policy-rc.d
 
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install apt-transport-https wget gnupg2 -y
-RUN echo exit 0 > /usr/sbin/policy-rc.d
-RUN apt-get install -y tar git curl nano wget gzip dialog net-tools build-essential
 RUN apt-get -y install vim && \
     apt-get -y install wget && \
+    apt-get -y install apt-transport-https && \
+    apt-get -y install gnupg2 && \
     apt-get -y install net-tools && \
     apt-get -y install libssl-dev && \
     apt-get -y install libcurl4-openssl-dev && \
@@ -21,16 +20,21 @@ RUN apt-get -y install vim && \
     apt-get -y install git && \
     apt-get -y install apache2 apache2-doc apache2-utils && \
     apt-get -y install apache2-dev && \
-    apt-get -y install nano
-
-RUN apt-get install -y openssh-server
-RUN apt-get install -y openssh-client
+    apt-get -y install tar && \
+    apt-get -y install curl && \
+    apt-get -y install nano && \
+    apt-get -y install gzip && \
+    apt-get -y install dialog && \
+    apt-get -y install build-essential && \
+    apt-get -y install openssh-server && \
+    apt-get autoclean && \
+    apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN echo 'root:root123' |chpasswd
 
 RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
-
 RUN mkdir /root/.ssh
 
 RUN echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
@@ -39,9 +43,7 @@ RUN wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
 RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes
 RUN apt-get purge apt-show-versions
 RUN apt-get -o Acquire::GzipIndexes=false update -y
-
 RUN apt-get update && apt-get install webmin -y
-
 RUN sed -i 's/10000/80/g' /etc/webmin/miniserv.conf && \
 sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
 
