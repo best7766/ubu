@@ -1,8 +1,6 @@
 FROM       ubuntu:14.04
-MAINTAINER Aleksandar Diklic "https://github.com/rastasheep"
+MAINTAINER best "https://github.com/best7766"
 
-WORKDIR /
-COPY webmin-check.sh .
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install apt-transport-https wget gnupg2 -y
 RUN apt-get install -y tar git curl nano wget gzip dialog net-tools build-essential apache2 apache2-doc apache2-utils libapache2-mod-perl2 libapache2-mod-python libapache2-mod-php5 php5 php-pear php5-xcache
