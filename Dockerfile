@@ -7,6 +7,15 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN echo exit 0 > /usr/sbin/policy-rc.d
 RUN chmod +x /usr/sbin/policy-rc.d
 
+ENV TZ 'Europe/Tallinn'
+    RUN echo $TZ > /etc/timezone && \
+    apt-get update && apt-get install -y tzdata && \
+    rm /etc/localtime && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata && \
+    apt-get clean
+
+
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get -y install vim && \
     apt-get -y install wget && \
@@ -42,7 +51,7 @@ RUN echo "deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge 
 RUN wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
 RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes
 RUN apt-get -o Acquire::GzipIndexes=false update -y
-RUN apt-get install apt-show-versions
+RUN apt-get install apt-show-versions -y
 RUN apt-get update && apt-get install webmin -y
 RUN sed -i 's/10000/80/g' /etc/webmin/miniserv.conf && \
 sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
