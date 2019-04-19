@@ -21,10 +21,7 @@ cd /root && \
 wget http://www.webmin.com/jcameron-key.asc && \
 apt-key add jcameron-key.asc 
 
-RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes && \
-apt-get purge apt-show-versions -y && \
-rm /var/lib/apt/lists/*lz4 && \
-apt-get -o Acquire::GzipIndexes=false update -y
+RUN apt-get -o Acquire::GzipIndexes=false update -y
 
 RUN apt-get update && apt-get install webmin -y
 
