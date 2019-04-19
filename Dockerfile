@@ -4,7 +4,8 @@ MAINTAINER best "https://github.com/best7766"
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo exit 0 > /usr/sbin/policy-rc.d
+RUN echo exit 101 > /usr/sbin/policy-rc.d
+RUN chmod +x /usr/sbin/policy-rc.d
 
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install apt-transport-https wget gnupg2 -y
@@ -23,7 +24,7 @@ RUN apt-get -y install vim && \
     apt-get -y install nano
 
 RUN apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
+RUN apt-get install -y openssh-client
 
 RUN echo 'root:root123' |chpasswd
 
@@ -48,8 +49,8 @@ sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN echo "ServerName localhost" >> ../etc/apache2/apache2.conf
+    
+RUN echo "ServerName localhost" >> ../etc/apache2/apache2.conf 
 RUN /etc/init.d/apache2 restart
 RUN /etc/webmin/start
 
