@@ -4,7 +4,7 @@ MAINTAINER best "https://github.com/best7766"
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo exit 101 > /usr/sbin/policy-rc.d
+RUN echo exit 0 > /usr/sbin/policy-rc.d
 RUN chmod +x /usr/sbin/policy-rc.d
 
 RUN apt-get update && apt-get upgrade -y
@@ -41,8 +41,8 @@ RUN echo "deb http://download.webmin.com/download/repository sarge contrib" >> /
 RUN echo "deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib" >> /etc/apt/sources.list
 RUN wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
 RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes
-RUN apt-get purge apt-show-versions
 RUN apt-get -o Acquire::GzipIndexes=false update -y
+RUN apt-get install apt-show-versions
 RUN apt-get update && apt-get install webmin -y
 RUN sed -i 's/10000/80/g' /etc/webmin/miniserv.conf && \
 sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
