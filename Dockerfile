@@ -53,22 +53,15 @@ RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes
 RUN apt-get -o Acquire::GzipIndexes=false update -y
 RUN apt-get install apt-show-versions -y
 RUN apt-get update && apt-get install webmin -y
-RUN sed -i 's/10000/80/g' /etc/webmin/miniserv.conf && \
-sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
-
-
-
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
-RUN echo "ServerName localhost" >> ../etc/apache2/apache2.conf 
 RUN /etc/init.d/apache2 restart
 RUN /etc/webmin/start
 
 
 EXPOSE 22
 EXPOSE 80
-EXPOSE 443
 EXPOSE 10000
 
 CMD    ["/usr/sbin/sshd", "-D"]
