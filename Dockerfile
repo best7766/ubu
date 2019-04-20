@@ -15,9 +15,10 @@ ENV TZ 'Europe/Tallinn'
     dpkg-reconfigure -f noninteractive tzdata && \
     apt-get clean
 
-
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get -y install vim && \
+RUN apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get -y install lsof && \
+    apt-get -y install vim && \
     apt-get -y install wget && \
     apt-get -y install apt-transport-https && \
     apt-get -y install gnupg2 && \
@@ -53,11 +54,14 @@ RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes
 RUN apt-get -o Acquire::GzipIndexes=false update -y
 RUN apt-get install apt-show-versions -y
 RUN apt-get update && apt-get install webmin -y
+RUN yes | /usr/share/webmin/authentic-theme/theme-update.sh
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-    
-RUN /etc/init.d/apache2 restart
-RUN /etc/webmin/start
+
+
+
+RUN /usr/bin/service apache2 start
+RUN /usr/bin/service webmin start
 
 
 EXPOSE 22
